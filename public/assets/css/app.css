@@ -130,6 +130,7 @@ header {
 .owl-theme .owl-dots {
     margin: 0 !important;
 }
+
 .owl-carousel .owl-item .item {
     width: 95px;
     height: 95px;
@@ -192,4 +193,57 @@ header {
     color: inherit;
     font-size: 1.12rem;
     font-weight: 500;
+}
+
+/* Alert message */
+
+.alert.show { 
+    animation: alert 750ms forwards; 
+}
+.flash .alert { 
+    border-right-width: 5px; 
+    max-width: 450px; 
+    position: fixed; 
+    bottom: 3.5em; 
+    left: -1000px; 
+    z-index: 99999999; 
+}
+.alert-danger { 
+    border-right-color: #721c24; 
+}
+.alert-success { 
+    border-right-color: #155724; 
+}
+.alert-warning { 
+    border-right-color: #856404; 
+}
+.alert-info { 
+    border-right-color: #0c5460; 
+}
+.alert-primary { 
+    border-right-color:#004085; 
+}
+.alert-secondary { 
+    border-right-color: #383d41; 
+}
+.alert-dark { 
+    border-right-color: #1b1e21; 
+}
+.alert-light { 
+    border-right-color: #818182; 
+}
+
+@keyframes alert {
+    0% {
+         left: 0px;
+    }
+    50% {
+         left: 15px;
+    }
+    90% {
+         left: 10px;
+    }
+    100% {
+         left: 15px;
+    }
 }

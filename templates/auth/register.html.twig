@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{title}} {% endblock %}
+
+{% block content %}
+    <h1 class="text-center mb-3">Inscription</h1>
+    <form action="{{ path('api_register') }}" method="post" id="auth-form" onsubmit="handleRegister(this,event)">
+        <div class="form-group">
+            <label for="pseudo">Nom d'utilisateur</label>
+            <input type="text" name="pseudo" id="pseudo" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input type="password" name="password" id="password" class="form-control">
+        </div>
+        <button class="btn btn-primary" type="submit">S'inscrire</button>
+    </form>
+{% endblock %}
+
+{% block javascripts %}    
+    <!-- Axios Ajax library Js File --> 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="{{ asset('assets/js/form.js') }}"></script>
+    <script src="{{ asset('assets/js/ajax.js') }}"></script>
+{% endblock %}

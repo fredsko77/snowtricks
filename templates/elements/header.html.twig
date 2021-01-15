@@ -1,5 +1,5 @@
 <header id="navTop">
-    <a href="./index.html" class="nav-brand">
+    <a href="{{ path('home') }}" class="nav-brand">
         <img 
             src="{{ asset('assets/img/logo.png') }}" 
             alt="Logo du site" 
@@ -9,16 +9,16 @@
     </a>
     <ul class="nav">
         <li class="nav-item">
-            <a class="nav-link" href="./index.html">Accueil</a>
+            <a class="nav-link" href="{{ path('home') }}">Accueil</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="./trick.html">Tricks</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="./login.html">Sign in</a>
+            <a class="nav-link" href="./login.html">Se connecter</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="./register.html">Sign up</a>
+            <a class="nav-link" href="{{ path('register') }}">S'inscrire</a>
         </li>
     </ul>
 </header>
