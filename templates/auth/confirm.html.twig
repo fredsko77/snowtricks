@@ -1,6 +1,10 @@
 {% extends "base.html.twig" %}
 
 {% block content %}
-    <h4>Votre compte a bien été validé ✅.</h4> 
-    <p>Cliquer sur ce <a href="{{ path('home') }}">lien </a> pour vous rendre sur le site.</p>
+    {% if errors %}
+        <h4 class="text-danger">Un erreur est survenue lors du traitement de la requête ! </h4>
+    {% else %}
+        <h4>Votre compte a bien été validé ✅.</h4> 
+        <p>Cliquer sur ce <a href="{{ path('home') }}">lien </a> pour vous rendre sur le site.</p>
+    {% endif %}
 {% endblock %}

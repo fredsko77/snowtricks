@@ -131,5 +131,30 @@ class UserController extends AbstractController
         return $response;
 
     }
+    
+    /**
+     * @Route(
+     *      "/users/confirm/{token}", 
+     *      name="confirm_user", 
+     *      requirements={"token"="[a-zA-Z0-9]+"},
+     *      methods={"GET"}
+     * )
+     */
+    public function confirm(string $token): Response
+    {
+        $exist = $this->repository->findOneBy(['token' => $token]);
+        $errors = null;
+        if ( $exist instanceof User ) {
+            $exist-> setConfirm(true);
+            $exist->setToken($this->helpers->generateToken(80));
+            $this->entityManager->persist($exist);
+            $this->entityManager->flush();
+        } else {
+            $errors = true;
+        }
+        return $this->render('auth/confirm.html.twig', [
+            'errors' => $errors,
+        ]);
+    }
 
 }
