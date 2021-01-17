@@ -165,10 +165,26 @@ class UserController extends AbstractController
      */
     public function forgetPassword() :Response
     {
-        // if ($this->getUser() instanceof User) {
-        //     return $this->redirectToRoute('home');
-        // }
+        if ($this->getUser() instanceof User) {
+            return $this->redirectToRoute('home');
+        }
         return $this->render("auth/forget-password.html.twig", []);
+    }
+
+    /**
+     * @Route(
+     *      "/user/change-password/{token}",
+     *      name="user_change_password",
+     *      requirements={"token"="[a-zA-Z0-9]+"},
+     *      methods={"GET"}
+     * )
+     */
+    public function changePassword(string $token) :Response 
+    {
+        if ($this->getUser() instanceof User) {
+            return $this->redirectToRoute('home');
+        }
+        return $this->render("auth/change-password.html.twig", ['token' => $token]);
     }
 
     /**
@@ -179,7 +195,7 @@ class UserController extends AbstractController
      *      methods={"GET"}
      * )
      */
-    public function changePassword(string $token, Request $request) :JsonResponse 
+    public function apiChangePassword(string $token, Request $request) :JsonResponse 
     {
         $response = new JsonResponse;
         $response->headers->set('Content-Type', 'application/json');
@@ -191,18 +207,39 @@ class UserController extends AbstractController
      * @Route(
      *      "/api/user/send_token_password",
      *      name="api_user_send_token_password",
-     *      requirements={"token"="[a-zA-Z0-9]+"},
      *      methods={"POST"}
      * )
      */
-    public function sendTokenPassword(Request $request, string $token) :JsonResponse
+    public function sendTokenPassword(Request $request, MailerInterface $mailer) :JsonResponse
     {
         $response = new JsonResponse;
         $response->headers->set('Content-Type', 'application/json');
         $data = (object) json_decode($request->getContent(), true);
         if ($data->email !== "") {
+            $user   = $this->repository->findOneBy(['email' => $data->email]);
 
+            if ($user instanceof User) {
+                $email = (new TemplatedEmail())
+                        ->from('testwamp08@gmail.com')
+                        ->to( $data->email ) 
+                        ->subject('Modifier votre mot de passe')
+                        ->htmlTemplate('emails/forget-password.html.twig')
+                        ->context([
+                            'user' => $user,
+                            'website' => $request->getHost(),
+                        ])
+                        ;
+                $mailer->send($email);
+            }
+            $response->setStatusCode(Response::HTTP_OK);
+            $response->setData([
+                'message' => $this->helpers->setJsonMessage("Un email vous a été envoyé", "success"),
+                "email"   => $user,
+            ]);
+
+            return $response;
         }
+
         $response->setStatusCode(Response::HTTP_NO_CONTENT).
         $response->setData([]);
         return $response;

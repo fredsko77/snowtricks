@@ -4,7 +4,7 @@
 
 {% block content %}
     <h1 class="text-center mb-3">Inscription</h1>
-    <form action="{{ path('api_register') }}" method="post" id="auth-form" onsubmit="handleRegister(this,event)">
+    <form action="{{ path('api_register') }}" method="post" id="auth-form" onsubmit="handleForm(this,event)">
         <div class="form-group">
             <label for="pseudo">Nom d'utilisateur</label>
             <input type="text" name="pseudo" id="pseudo" class="form-control" required autofocus>

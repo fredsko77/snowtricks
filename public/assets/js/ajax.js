@@ -1,5 +1,5 @@
 
-const handleRegister = (form,e) => {
+const handleForm = (form,e) => {
     e.preventDefault();
     let url = form.action;
     let data = { ...getValues('.form-control') }

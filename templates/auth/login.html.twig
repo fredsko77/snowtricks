@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Log in!{% endblock %}
+{% block title %}Connexion {% endblock %}
 
 {% block content %}
     <h1 class="text-center mb-3">Connexion</h1>
@@ -36,8 +36,8 @@
             </div>
         #}
 
-        <p>Vous n'avez pas encore de compte,clique <a href="{{ path('register') }}">ici</a></p>
-        <p>Vous avez oublié votre mot de passe.</p>
+        <p>Vous n'avez pas encore de compte,clique <a href="{{ path('register') }}">ici</a>.</p>
+        <p>Vous avez oublié votre mot de passe, clique <a href="{{ path('auth_forget_password') }}">ici</a>.</p>
 
         <button class="btn btn btn-primary" type="submit">
             Envoyer
