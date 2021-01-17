@@ -12,6 +12,7 @@ const handleForm = (form,e) => {
                 let type = data.message.type; 
                 let message = data.message.content;
                 flash(message, type, true);
+                console.warn(data);
                 if (data.hasOwnProperty('url')) {
                     let url = data.url;
                     let delay = 2000; 

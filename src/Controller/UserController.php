@@ -142,18 +142,14 @@ class UserController extends AbstractController
     public function confirm(string $token): Response
     {
         $exist = $this->repository->findOneBy(['token' => $token]);
-        $errors = null;
         if ( $exist instanceof User ) {
             $exist-> setConfirm(true);
             $exist->setToken($this->helpers->generateToken(80));
             $this->entityManager->persist($exist);
             $this->entityManager->flush();
-        } else {
-            $errors = true;
-        }
-        return $this->render('auth/confirm.html.twig', [
-            'errors' => $errors,
-        ]);
+            return $this->render('auth/confirm.html.twig', []);
+        }         
+        return (new Response())->setStatusCode(Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -169,38 +165,6 @@ class UserController extends AbstractController
             return $this->redirectToRoute('home');
         }
         return $this->render("auth/forget-password.html.twig", []);
-    }
-
-    /**
-     * @Route(
-     *      "/user/change-password/{token}",
-     *      name="user_change_password",
-     *      requirements={"token"="[a-zA-Z0-9]+"},
-     *      methods={"GET"}
-     * )
-     */
-    public function changePassword(string $token) :Response 
-    {
-        if ($this->getUser() instanceof User) {
-            return $this->redirectToRoute('home');
-        }
-        return $this->render("auth/change-password.html.twig", ['token' => $token]);
-    }
-
-    /**
-     * @Route(
-     *      "/api/user/change-password/{token}",
-     *      name="api_user_change_password",
-     *      requirements={"token"="[a-zA-Z0-9]+"},
-     *      methods={"GET"}
-     * )
-     */
-    public function apiChangePassword(string $token, Request $request) :JsonResponse 
-    {
-        $response = new JsonResponse;
-        $response->headers->set('Content-Type', 'application/json');
-        $data = (object) json_decode($request->getContent(), true);
-        return $response;
     }
 
     /**
@@ -242,6 +206,96 @@ class UserController extends AbstractController
 
         $response->setStatusCode(Response::HTTP_NO_CONTENT).
         $response->setData([]);
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *      "/user/change-password/{token}",
+     *      name="user_change_password",
+     *      requirements={"token"="[a-zA-Z0-9]+"},
+     *      methods={"GET"}
+     * )
+     */
+    public function changePassword(string $token) :Response 
+    {
+        if ($this->getUser() instanceof User) return $this->redirectToRoute('home');
+
+        if($this->repository->findOneBy(['token' => $token]) instanceof User) return $this->render("auth/change-password.html.twig", ['token' => $token]);
+
+        return (new Response())->setStatusCode(Response::HTTP_UNAUTHORIZED);
+    }
+
+    /**
+     * @Route(
+     *      "/api/user/change-password/{token}",
+     *      name="api_user_change_password",
+     *      requirements={"token"="[a-zA-Z0-9]+"},
+     *      methods={"POST"}
+     * )
+     */
+    public function apiChangePassword(string $token, Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $entityManager) :JsonResponse 
+    {
+        $response = new JsonResponse;
+        $response->headers->set('Content-Type', 'application/json');
+        $data = (object) json_decode($request->getContent(), true);
+        $user = $this->repository->findOneBy(['token' => $token]);
+        if (!$user instanceof User) {
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            $response->setData([
+                "message" => $this->helpers->setJsonMessage("Vous n'êtes pas autorisé à effectuer cette requête")
+            ]);
+
+            return $response;
+        }
+
+        if (!$this->helpers->isFilled($data)) {
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData([
+                "message" => $this->helpers->setJsonMessage("Tous les champs doivent être remplis !"),
+            ]);
+
+            return $response;            
+        }
+        
+        if ($data->password !== $data->passwordConfirm) {   
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData([
+                "message" => $this->helpers->setJsonMessage("Les deux mots de passe doivent être identiques ! "),
+            ]);
+
+            return $response;
+
+        } else if ($data->password === $data->passwordConfirm) {
+            if ($this->helpers->passValid($data->password)) {
+                $user   ->setPassword( $encoder->encodePassword($user, $data->password) )
+                        ->setToken($this->helpers->generateToken(80))
+                        ->setCreatedAt($this->helpers->now())
+                        ;
+                $this->entityManager->persist($user);
+                $this->entityManager->flush();
+
+                $response->setStatusCode(Response::HTTP_OK);
+                $response->setData([
+                    "message" => $this->helpers->setJsonMessage("Votre mot de passe a été modifié . ", "success"),
+                    'url' => $this->generateUrl("login"),
+                ]);
+
+                return $response;
+            }
+
+            $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+            $response->setData([
+                "message" => $this->helpers->setJsonMessage("Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre, et doit contenir au moins 8 caracctères !"),
+            ]);
+
+            return $response;
+        }
+
+        $response->setStatusCode(Response::HTTP_NO_CONTENT);
+        $response->setData([
+            "message" => $this->helpers->setJsonMessage("Une erreur est survenue lors du traitement de la requête ! 🤕 "),
+        ]);
         return $response;
     }
 
