@@ -53,12 +53,11 @@ class UserController extends AbstractController
      * @Route(
      *      "/register", 
      *      name="register", 
-     *      methods={"GET", "POST"}
+     *      methods={"GET"}
      * )
      */
     public function register(): Response
     {
-
         return $this->render('auth/register.html.twig', [
             'helpers' => $this->helpers,
             'title' => 'Inscription ',
@@ -155,6 +154,58 @@ class UserController extends AbstractController
         return $this->render('auth/confirm.html.twig', [
             'errors' => $errors,
         ]);
+    }
+
+    /**
+     * @Route(
+     *      "/auth/forget-password",
+     *      name="auth_forget_password",
+     *      methods={"GET"}
+     * )
+     */
+    public function forgetPassword() :Response
+    {
+        // if ($this->getUser() instanceof User) {
+        //     return $this->redirectToRoute('home');
+        // }
+        return $this->render("auth/forget-password.html.twig", []);
+    }
+
+    /**
+     * @Route(
+     *      "/api/user/change-password/{token}",
+     *      name="api_user_change_password",
+     *      requirements={"token"="[a-zA-Z0-9]+"},
+     *      methods={"GET"}
+     * )
+     */
+    public function changePassword(string $token, Request $request) :JsonResponse 
+    {
+        $response = new JsonResponse;
+        $response->headers->set('Content-Type', 'application/json');
+        $data = (object) json_decode($request->getContent(), true);
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *      "/api/user/send_token_password",
+     *      name="api_user_send_token_password",
+     *      requirements={"token"="[a-zA-Z0-9]+"},
+     *      methods={"POST"}
+     * )
+     */
+    public function sendTokenPassword(Request $request, string $token) :JsonResponse
+    {
+        $response = new JsonResponse;
+        $response->headers->set('Content-Type', 'application/json');
+        $data = (object) json_decode($request->getContent(), true);
+        if ($data->email !== "") {
+
+        }
+        $response->setStatusCode(Response::HTTP_NO_CONTENT).
+        $response->setData([]);
+        return $response;
     }
 
 }
