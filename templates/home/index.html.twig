@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{title}}
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/loading.min.css') }}">
+{% endblock %}
+
+{% block header %}
+	<div class="masthead">
+		<h1>La site numéro 1 sur le snow</h1>
+		<a href="#main" id="scroll" title="Voir plus">
+			<i class="icofont-rounded-down"></i>
+		</a>
+	</div>
+{% endblock %}
+
+{% block content %}
+
+	<h2 class="page-title">Les tricks</h2>
+	{% if tricks|length > 0 %}
+		{% include "home/_tricks.html.twig" %}
+		<div id="loader-container" class="hidden"></div>
+		<div class="row justify-content-center">
+			<button id="loadButton" data-page="1" onclick="loadMoreTricks(this)" class="btn btn-primary">Charger plus</button>
+		</div>
+	{% else %}
+		<p class="text-muted">Pas de tricks</p>
+	{% endif %}
+
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('assets/js/home.js') }}"></script>
+{% endblock %}

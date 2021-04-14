@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	New Trick
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/css/form.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('assets/js/OwlCarousel/dist/owl.carousel.min.js') }}"></script>
+	<script src="{{ asset('assets/js/add-trick.js') }}"></script>
+	<script src="{{ asset('assets/js/carousel.min.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+	<a class="back-button" href="{{ path('trick_index') }}">
+		<i class="icofont-rounded-left"></i>
+		Revenir aux tricks
+	</a>
+
+	<h1>Création de trick</h1>
+
+	<form action="{{ path("api_trick_store") }}" method="post" onsubmit="handleTrick(this, event);">
+		<div class="form-group">
+			<label for="name">Nom du trick</label>
+			<input type="text" name="name" id="name" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="poster">New poster</label>
+			<input type="file" class="hidden" name="poster" id="poster" onchange="previewPoster(event)">
+			<img src="" class="hidden uploaded-trick-poster" id="uploaded-trick-poster" alt="Poster uploadé du trick">
+		</div>
+		<fieldset class="mb-3">
+			<div class="custom-file">
+				<input type="file" class="custom-file-input" name="images[]" id="customFile" multiple onchange="previewImages(event)">
+				<label class="custom-file-label" for="customFile">Choose file</label>
+			</div>
+			<div class="trick-images-holder"></div>
+		</fieldset>
+		<fieldset>
+			<div class="form-group" id="input-videos">
+				<label for="videos">
+					Vidéos
+					<i class="icofont-plus cursor-pointer" onclick="addInput()"></i>
+				</label>
+				<div class="row video mb-1 align-items-baseline" data-video="1">
+					<input type="text" name="videos[]" id="trick_videos_1" class="form-control col-11">
+					<span class="col-1">
+						<i class="icofont-close cursor-pointer font-weight-bold" title="Supprimer cette tache" onclick="deleteInput(1)"></i>
+					</span>
+				</div>
+			</div>
+		</fieldset>
+		<div class="form-group col-12 col-md-8 no-padding">
+			<textarea name="description" id="description" class="form-control" rows="10"></textarea>
+		</div>
+		<div class="form-group col-12 col-md-8 col-lg-4 no-padding">
+			<select name="group" id="group" class="custom-select form-control">
+				{% for group in groups %}
+					<option value="{{ group.id }}">{{ group.name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<input type="hidden" name="_token" value="{{ csrf_token('create') }}">
+		<button class="btn btn-primary" type="submit">Envoyer</button>
+	</form>
+
+{% endblock %}

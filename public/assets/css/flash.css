@@ -1,0 +1,80 @@
+/* Alert message */
+
+.alert.show {
+    animation: showAlert 300ms forwards;
+}
+
+.alert.hide {
+    animation: hideAlert 300ms forwards;
+}
+
+.flash .alert {
+    border-right-width: 5px;
+    max-width: 450px;
+    position: fixed;
+    bottom: 3.5em;
+    left: -1000px;
+    z-index: 99999999;
+}
+
+.alert-danger {
+    border-right-color: #721c24;
+}
+
+.alert-success {
+    border-right-color: #155724;
+}
+
+.alert-warning {
+    border-right-color: #856404;
+}
+
+.alert-info {
+    border-right-color: #0c5460;
+}
+
+.alert-primary {
+    border-right-color: #004085;
+}
+
+.alert-secondary {
+    border-right-color: #383d41;
+}
+
+.alert-dark {
+    border-right-color: #1b1e21;
+}
+
+.alert-light {
+    border-right-color: #818182;
+}
+
+@keyframes showAlert {
+    0% {
+        left: 0px;
+    }
+    50% {
+        left: 15px;
+    }
+    90% {
+        left: 10px;
+    }
+    100% {
+        left: 15px;
+    }
+}
+
+@keyframes hideAlert {
+    0% {
+        left: 15px;
+    }
+    50% {
+        left: 10px;
+    }
+    90% {
+        left: 15px;
+    }
+    100% {
+        left: -1000px;
+    }
+}

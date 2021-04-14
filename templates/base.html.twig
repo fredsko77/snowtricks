@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}"/>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+		<link rel="stylesheet" href="{{ asset('assets/icofont/icofont.min.css') }}.">
+		<link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+		<link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+		<link rel="stylesheet" href="{{ asset('assets/css/flash.min.css') }}"> {% block stylesheets %}{% endblock %}
+		<title>
+			{% block title %}
+				Le site numero un sur le snowboard
+			{% endblock %}
+			- SnowTricks
+		</title>
+	</head>
+	<body>
+		{% include "elements/header.html.twig" %}
+		{% block header %}{% endblock %}
+
+		<div class="container" id="main">
+			{% for type, messages in app.session.flashbag.all() %}
+				{% for message in messages %}
+					<div class="alert alert-{{type}}">
+						{{message}}
+					</div>
+				{% endfor %}
+			{% endfor %}
+			{% block content %}{% endblock %}
+		</div>
+
+		<div id="scrollTop" class="hidden" onclick="scrollToTop()">
+			<i class="icofont-rounded-up"></i>
+		</div>
+
+		<div class="footer">
+			<p>AGATHE Frédérick © Copyright 2021</p>
+		</div>
+
+		<div class="flash"></div>
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+		<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<script src="{{ asset('assets/js/main.js') }}"></script>
+		<script src="{{ asset('assets/js/flash.min.js') }}"></script>
+		<script>
+			AOS.init({duration: 1200});
+		</script>
+		{% block javascripts %}{% endblock %}
+	</body>
+</html>

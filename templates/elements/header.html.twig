@@ -1,0 +1,47 @@
+<header id="navTop">
+	<div class="menu-mobile">
+		<a class="menu-mobile-item" href="{{ path('home') }}">
+			<i class="icofont-home"></i>
+		</a>
+		<a class="menu-mobile-item" href="{{ path('trick_index') }}">
+			<i class="icofont-book-mark"></i>
+		</a>
+		{% if app.user %}
+			<a class="menu-mobile-item" href="{{ path('app_logout') }}">
+				<i class="icofont-login"></i>
+			</a>
+		{% else %}
+			<a class="menu-mobile-item" href="{{ path('app_login') }}">
+				<i class="icofont-login"></i>
+			</a>
+			<a class="menu-mobile-item" href="{{ path('register') }}">
+				<i class="icofont-logout"></i>
+			</a>
+		{% endif %}
+	</div>
+	<div class="menu-desktop">
+		<a href="{{ path('home') }}" class="nav-brand">
+			<img src="{{ asset('assets/img/logo.png') }}" alt="Logo du site" srcset="{{ asset('assets/img/logo.png') }}" class="nav-logo">
+		</a>
+		<ul class="nav">
+			<li class="nav-item">
+				<a class="nav-link" href="{{ path('home') }}">Accueil</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="{{ path('trick_index') }}">Tricks</a>
+			</li>
+			{% if app.user %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ path('app_logout') }}">Se déconnecter</a>
+				</li>
+			{% else %}
+				<li class="nav-item">
+					<a class="nav-link" href="{{ path('app_login') }}">Se connecter</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="{{ path('register') }}">S'inscrire</a>
+				</li>
+			{% endif %}
+		</ul>
+	</div>
+</header>

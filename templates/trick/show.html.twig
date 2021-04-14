@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ trick.name }}
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('assets/js/OwlCarousel/dist/assets/owl.carousel.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/js/OwlCarousel/dist/assets/owl.theme.green.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/css/loading.min.css') }}">
+{% endblock %}
+
+{% block javascripts %}
+	<script src="{{ asset('assets/js/OwlCarousel/dist/owl.carousel.min.js') }}"></script>
+	<script src="{{ asset('assets/js/carousel.min.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+	<div class="poster-container mb-5 position-relative" style="background-image: url('{% if trick.poster %}{{ asset(trick.poster) }}{% else %}{{ asset('assets/img/snowboard-113784_640.jpg') }}{% endif %}')">
+		<span class="trick-name">{{ trick.name }}</span>
+		{% if app.user %}
+			<span class="actions-btn">
+				<label for="poster" title="Modifier le trick">
+					<a href="{{ path('trick_edit', { id: trick.id }) }}">
+						<i class="icofont-ui-edit"></i>
+					</a>
+				</label>
+				<i class="icofont-ui-delete" title="Supprimer l'image à la une"></i>
+			</span>
+		{% endif %}
+	</div>
+
+	<!-- Carousel images and videos -->
+	<div
+		class="owl-carousel mt-3 mb-5">
+		<!-- Trick images -->
+		{% for image in trick.image %}
+			<div class="item trick_image_{{ image.id }}">
+				<img class="image-owl-item" id="trick_image_{{ image.id }}" src="/../../{{ image.path }}" alt="Image de la figure" srcset="/../../{{ image.path }}">
+			</div>
+		{% endfor %}
+
+		<!-- Trick videos -->
+		{% for video in trick.videos %}
+			<div class="item trick_video_{{ video.id }}">
+				<iframe class="trick-video" id="trick_video_{{ video.id }}" src="{{ video.url }}" type="text/html" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+			</div>
+		{% endfor %}
+	</div>
+
+	{# Show medias #}
+	<div class="row justify-content-center">
+		<span class="btn bg-grey" id="see-medias" onclick="displayCarousel(this)">See medias</span>
+	</div>
+
+	<p class="trick-description">{{ trick.description }}</p>
+
+	<div class="trick-metas mb-4">
+		<span class="badge bg-grey trick-group">Écrit le
+			{{ trick.createdat|date('d-m-Y') }}, par
+			<o class="font-weight-bold">{{ trick.user.pseudo }}</o>
+		</span>
+		<span class="badge bg-grey trick-group">
+			<a href="{{ path('group_tricks', {id: trick.group.id, slug: trick.group.slug}) }}">{{ trick.group.name }}</a>
+		</span>
+
+		{% if trick.updatedat %}
+			<span class="badge bg-grey trick-group">Dernière modification le
+				{{ trick.updatedat|date('d-m-Y') }}</span>
+		{% endif %}
+
+	</div>
+
+	{% if app.user %}
+		<div class="trick-comments-form">
+			<form class="form-inline" action="{{ path('api_comments_store', {id: trick.id}) }}" method="post" id="comments-form" onsubmit="handleComment(this, event)">
+				<label for="comment" class="sr-only"></label>
+				<textarea class="form-control col-lg-7 col-12 mb-2 mr-sm-2" name="comment" id="comment" rows="2"></textarea>
+				<button type="submit" class="btn btn-primary col-lg-3 col-12 col-md-4">Laisser un commentaire</button>
+			</form>
+		</div>
+	{% endif %}
+
+	{% include "trick/_comments.html.twig" %}
+
+{% endblock %}

@@ -1,0 +1,154 @@
+<a class="back-button" href="{{ path('trick_index') }}">
+	<i class="icofont-rounded-left"></i>
+	Revenir aux tricks
+</a>
+
+<!-- Trick poster -->
+<div id="trick-poster" class="poster-container mb-5 position-relative" style="background-image: url('/../../{{ trick.poster }}')">
+
+	<input type="file" class="hidden" name="poster" id="poster" onchange="updatePoster({{ trick.id }})">
+
+	<span class="trick-name">{{ trick.name }}</span>
+	<span class="actions-btn">
+		<label for="poster" title="Modifier l'image à la une">
+			<i class="icofont-ui-edit"></i>
+		</label>
+		<i class="icofont-ui-delete" onclick="deletePoster({{ trick.id }})" title="Supprimer l'image à la une"></i>
+	</span>
+
+</div>
+<!-- End Trick poster -->
+
+<!-- Carousel images and videos -->
+<div
+	class="owl-carousel mt-3 mb-5">
+	{# Trick images #}
+	{% for image in trick.image %}
+		<div class="item trick_image_{{ image.id }}">
+			<img class="image-owl-item" id="trick_image_{{ image.id }}" src="/../../{{ image.path }}" alt="Image de la figure" srcset="/../../{{ image.path }}">
+			<input type="file" class="hidden" name="image" id="image_{{image.id}}" onchange="updateImage({{ image.id }})">
+			<span class="actions-btn">
+				<label for="image_{{ image.id }}" title="Modifier cette image">
+					<i class="icofont-ui-edit"></i>
+				</label>
+				<i class="icofont-ui-delete" onclick="deleteImage({{ image.id }})"></i>
+			</span>
+		</div>
+	{% endfor %}
+
+	{# Trick videos #}
+	{% for video in trick.videos %}
+		<div class="item trick_video_{{ video.id }}">
+			<iframe class="trick-video" id="trick_video_{{ video.id }}" src="{{ video.url }}" type="text/html" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+			<span class="actions-btn">
+				<i class="icofont-ui-edit" title="Modifier cette vidéo" data-action="{{ path('api_trick_video_edit', {id: video.id}) }}" data-video="{{ video.id }}" data-url="{{ video.url }}" onclick="hydrateForm(this)" data-dialog="editVideo"></i>
+				<i class="icofont-ui-delete" onclick="deleteVideo({{ video.id }})"></i>
+			</span>
+		</div>
+	{% endfor %}
+	{# Trick media #}
+	<div class="item" id="add-media">
+		<label for="image" class="btn btn-success col-12" title="Ajouter une image">
+			<i class="icofont-ui-image"></i>
+		</label>
+		<input type="file" name="image" id="image" class="hidden" onchange="createImage({{trick.id}})">
+		<a class="text-white btn btn-primary col-12" title="Ajouter une vidéo" aria-toggle="createVideo">
+			<i class="icofont-ui-video"></i>
+		</a>
+
+	</div>
+</div>
+<!-- End Carousel images and videos -->
+
+<!-- Trick video create form -->
+<div class="dialog fade" aria-dialog="createVideo">
+
+	<div class="dialog-box">
+
+		<form onsubmit="createVideo(this, event)" action="{{ path('api_trick_video_create', {id: trick.id}) }}" method="post">
+			<div class="dialog-header">
+				<p class="h5">Nouvelle vidéo</p>
+				<span class="dialog-close" aria-action="close">
+					<i class="icofont-close"></i>
+				</span>
+			</div>
+
+			<div class="dialog-body">
+
+				<div class="form-group">
+					<label for="url">Lien de la vidéo</label>
+					<input type="text" name="url" id="url" class="form-control">
+				</div>
+			</div>
+
+			<div class="dialog-footer">
+				<span class="btn btn-secondary" aria-action="close">Fermer</span>
+				<button type="submit" class="btn btn-primary">Enregistrer</button>
+			</div>
+
+		</form>
+	</div>
+
+</div>
+<!-- End Trick video create form -->
+
+<!-- Trick video edit form -->
+<div class="dialog fade" aria-dialog="editVideo">
+
+	<div class="dialog-box">
+
+		<form onsubmit="editVideo(this, event)" action="" method="post">
+			<div class="dialog-header">
+				<p class="h5">Éditer la vidéo
+					<span id="video-id" class="text-success"></span>
+				</p>
+				<span class="dialog-close" aria-action="close">
+					<i class="icofont-close"></i>
+				</span>
+			</div>
+
+			<div class="dialog-body">
+
+				<div class="form-group">
+					<label for="url">Lien de la vidéo</label>
+					<input type="text" name="url" id="url" class="form-control">
+				</div>
+			</div>
+
+			<div class="dialog-footer">
+				<span class="btn btn-secondary" aria-action="close">Fermer</span>
+				<button type="submit" class="btn btn-primary">Enregistrer</button>
+			</div>
+
+		</form>
+	</div>
+
+</div>
+<!-- End Trick video edit form -->
+
+<!-- Trick Content form  -->
+<div class="form">
+	<form action="" method="post">
+
+		<div class="row">
+			<div class="col-md-8 col-12">
+				<div class="form-group">
+					<textarea name="description" id="description" value="description" class="form-control" rows="8"></textarea>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-lg-4 col-12 form-group">
+				<select name="group" id="group" class="custom-select">
+					<option value="divers">Divers</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="d-flex justify-content-end">
+			{{ include('trick/_delete_form.html.twig') }}
+			<button type="submit" class="btn btn-primary">Enregistrer</button>
+		</div>
+	</form>
+</div>
+<!-- End Trick content form -->

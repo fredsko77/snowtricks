@@ -1,0 +1,27 @@
+<div class="tricks-container">
+	{% for trick in tricks %}
+		<div class="card-tricks">
+			<div class="card-tricks-body">
+				<img src="{% if trick.poster %}{{ asset(trick.poster) }}{% else %}{{ asset('assets/img/snowboard-113784_640.jpg') }}{% endif %}" alt="Poster du trick" srcset="{% if trick.poster %}{{ asset(trick.poster) }}{% else %}{{ asset('assets/img/snowboard-113784_640.jpg') }}{% endif %}" class="card-tricks-img">
+			</div>
+			<div class="card-tricks-footer">
+				<a class="card-tricks-title" href="{{ path('trick_show', {id: trick.id, slug: trick.slug}) }}">{{ trick.name }}</a>
+				{% if app.user %}
+					<div class="actions-btn">
+						<a href="{{ path('trick_edit', {id: trick.id}) }}">
+							<i class="icofont-ui-edit"></i>
+						</a>
+						<form method="post" action="{{ path('trick_delete', {'id': trick.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+							<input type="hidden" name="_method" value="DELETE">
+							<input type="hidden" name="_token" value="{{ csrf_token('delete' ~ trick.id) }}">
+							<button type="submit" class="delete-btn">
+								<i class="icofont-ui-delete"></i>
+							</button>
+						</form>
+					</div>
+				{% endif %}
+			</div>
+		</div>
+	{% endfor %}
+
+</div>

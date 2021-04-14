@@ -1,0 +1,131 @@
+/* Dialog */
+
+.dialog {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: -10px;
+    left: 0;
+    background-color: rgba(0, 0, 0, .55);
+    z-index: 99;
+    opacity: 1;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+.dialog.show {
+    animation: dialog-show 800ms forwards;
+}
+
+.dialog.fade {
+    animation: dialog-fade 800ms forwards;
+}
+
+.dialog-close {
+    font-size: 25px;
+    color: rgba(33, 37, 41, .75);
+    font-weight: 600;
+    line-height: 1;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: .25rem;
+    border-color: transparent;
+    background-color: transparent;
+    transition: all 150ms ease-in-out;
+}
+
+.dialog-close:hover {
+    color: #f9f9f9;
+    background-color: #dc3545;
+    cursor: pointer;
+}
+
+.dialog-box {
+    height: auto;
+    max-height: 95vh;
+    width: 100%;
+    max-width: 550px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 100;
+    border-radius: .2rem;
+    box-shadow: 2px 2px 8px rgba(255, 255, 255, .15);
+}
+
+.dialog-header {
+    min-height: 5vh;
+    height: auto;
+    padding: .375rem .75rem;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, .180);
+}
+
+.dialog-body {
+    min-height: 10vh;
+    max-height: 78vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: auto;
+    padding: .375rem .75rem;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.dialog-footer {
+    min-height: 5vh;
+    height: auto;
+    padding: .375rem .75rem;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: flex-end;
+    border-top: 1px solid rgba(0, 0, 0, .180);
+}
+
+.dialog-footer .btn {
+    margin-right: .3rem;
+}
+
+.dialog-footer .btn:last-child {
+    margin-right: 0;
+}
+
+
+/* Animation dialog */
+
+@keyframes dialog-show {
+    from {
+        opacity: 0;
+        top: -10px;
+        visibility: visible;
+    }
+    to {
+        opacity: 1;
+        top: 0;
+        visibility: visible;
+    }
+}
+
+@keyframes dialog-fade {
+    from {
+        opacity: 1;
+        top: 0;
+    }
+    to {
+        opacity: 0;
+        top: -10px;
+        visibility: hidden;
+    }
+}

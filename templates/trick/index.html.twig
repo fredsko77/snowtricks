@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+
+{% block header %}
+	<div class="jumbotron">
+		<h1 class="display-4">Les tricks</h1>
+		{# <p class="lead">{{ group.description }}</p> #}
+	</div>
+{% endblock %}
+
+{% block content %}
+	{% if tricks|length > 0 %}
+		{% include "home/_tricks.html.twig" %}
+	{% else %}
+		<p class="text-muted">Pas de tricks</p>
+	{% endif %}
+	<div class="pagination">
+		{% for page in pagination %}
+			{{ page|raw }}
+		{% endfor %}
+	</div>
+{% endblock %}

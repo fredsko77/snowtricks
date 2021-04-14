@@ -1,0 +1,40 @@
+<div class="trick-comments-container">
+	<span class="text-center font-weight-bold">
+		<o id="count-comments">{{ trick.comments|length }}</o>
+		commentaires
+	</span>
+	<div class="trick-comments">
+		{% for comment in comments %}
+			<div class="comment" data-comment="{{ comment.id }}">
+				<div class="comment-user">
+					{% if comment.user.image != null %}
+						<img class="comment-img" src="/../{{ comment.user.image }}" alt="Poster de l'utilisateur du commentaire" srcset="/../{{ comment.user.image }}">
+					{% else %}
+						<div class="alt-user">
+							<i class="icofont-ui-user"></i>
+						</div>
+					{% endif %}
+				</div>
+				<div class="comment-content">
+					<p class="comment-author">{{ comment.user.pseudo }}</p>
+					<p class="comment-text">
+						{{ comment.comment }}
+					</p>
+					<div class="comment-metas">
+						<small>
+							Publié le
+							{{ comment.createdat|date('d-m-Y') }}
+						</small>
+						{% if app.user and app.user.id == comment.user.id %}
+							<a href="{{ path('api_comments_delete', {id: comment.id}) }}" class="btn btn-link" onclick="deleteComment(this,event)">Supprimer</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	<div id="loader-container" class="hidden"></div>
+	<div class="row justify-content-center">
+		<button id="loadButton" onclick="loadMoreComments(this)" data-url="{{ path('api_comment_page', {id: trick.id}) }}" data-page="1" class="btn btn-primary">Charger plus</button>
+	</div>
+</div>
