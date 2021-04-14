@@ -88,7 +88,7 @@ const loadComment = ({ user, created_at, id, comment }, connected, pos = 'after'
             <i class="icofont-ui-user"></i>
         </div>`;
 
-    if (user.image !== null) {
+    if (user.image !== null && user.image !== "") {
         userImage = `<img class="comment-img" src="/../${user.image}" alt="Poster de l'utilisateur du commentaire" srcset="/../${user.image}">`
     }
 
