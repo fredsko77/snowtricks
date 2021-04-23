@@ -6,12 +6,10 @@ const handleForm = (form, e) => {
     axios
         .post(url, data)
         .then(({ data }) => {
-            console.log(data);
             if (data.hasOwnProperty('message')) {
                 let type = data.message.type;
                 let message = data.message.content;
                 flash(message, type, true);
-                console.warn(data);
                 if (data.hasOwnProperty('url')) {
                     let url = data.url;
                     let delay = 2000;
