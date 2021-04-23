@@ -24,7 +24,7 @@ php bin/console doctrine:database:create
 ```php
 php bin/console make:migration
 ``` 
-En cas d'erreur, executer la commande **`mkdir migrations`** puis relancer la commande **`php  php bin/console make:migration`**
+En cas d'erreur, executer la commande **`mkdir migrations`** puis relancer la commande **`php bin/console make:migration`**
 
 7. Executer les fichiers de migrations 
 ```php 
