@@ -182,7 +182,7 @@ class UserController extends AbstractController
      *      methods={"POST"}
      * )
      */
-    public function apiChangePassword(string $token, Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $entityManager): JsonResponse
+    public function apiChangePassword(string $token, Request $request, UserPasswordEncoderInterface $encoder): JsonResponse
     {
         $response = new JsonResponse;
         $response->headers->set('Content-Type', 'application/json');
