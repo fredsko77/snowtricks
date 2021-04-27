@@ -7,9 +7,14 @@ use App\Repository\TrickRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=TrickRepository::class)
+ * @UniqueEntity(
+ *  fields={"name"},
+ *  message="Ce trick existe déjà"
+ * )
  */
 class Trick
 {
